@@ -8,7 +8,6 @@ const Header = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      console.log(user);
       setCurrentUser(user);
     });
   }, []);
