@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { signInWithPopup } from "firebase/auth";
 
 import { auth, provider } from "./firebase";
+import { createChat } from "./api/chats-api";
 
 const Header = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -12,20 +13,46 @@ const Header = () => {
     });
   }, []);
 
+  const onCreateChatClick = async () => {
+    if (currentUser && currentUser.uid) {
+      const newChatId = await createChat(currentUser.uid);
+      window.location.href = `/chats/${newChatId}`;
+    }
+  };
+
   const onSignInClick = () => {
     signInWithPopup(auth, provider);
   };
 
-  const onSignOut = () => {
+  const onSignOutClick = () => {
     auth.signOut();
   };
 
   return (
-    <header className="px-5 flex justify-end cursor-pointer hover:underline">
+    <header className="px-5 flex gap-5 justify-end">
       {currentUser ? (
-        <button onClick={onSignOut}>{currentUser.displayName}</button>
+        <button
+          className="cursor-pointer hover:underline"
+          onClick={onCreateChatClick}
+        >
+          Create Chat
+        </button>
+      ) : null}
+
+      {currentUser ? (
+        <button
+          className="cursor-pointer hover:underline"
+          onClick={onSignOutClick}
+        >
+          {currentUser.displayName}
+        </button>
       ) : (
-        <button onClick={onSignInClick}>Sign In</button>
+        <button
+          className="cursor-pointer hover:underline"
+          onClick={onSignInClick}
+        >
+          Sign In
+        </button>
       )}
     </header>
   );

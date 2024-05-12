@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   collection,
   limit,
@@ -5,16 +6,19 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
 
 import { db } from "../firebase";
 
-export const useMessagesList = () => {
+export const useMessagesList = (chatId) => {
   const [messagesList, setMessagesList] = useState([]);
 
   useEffect(() => {
+    if (!chatId) {
+      return () => {};
+    }
+
     const q = query(
-      collection(db, "messages"),
+      collection(db, `chats/${chatId}/messages`),
       orderBy("createdAt", "desc"),
       limit(5)
     );
@@ -31,7 +35,7 @@ export const useMessagesList = () => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [chatId]);
 
   return { messagesList };
 };

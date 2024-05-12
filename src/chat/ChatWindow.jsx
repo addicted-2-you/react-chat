@@ -1,8 +1,8 @@
 import { useMessagesList } from "./useMessagesList";
 import ChatInput from "./ChatInput";
 
-const ChatWindow = () => {
-  const { messagesList } = useMessagesList();
+const ChatWindow = ({ chatId }) => {
+  const { messagesList } = useMessagesList(chatId);
 
   return (
     <div className="p-5 border-2 border-black rounded-2xl">
@@ -12,7 +12,7 @@ const ChatWindow = () => {
         ))}
       </ul>
 
-      <ChatInput />
+      <ChatInput chatId={chatId} />
     </div>
   );
 };

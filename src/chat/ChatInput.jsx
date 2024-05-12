@@ -1,16 +1,20 @@
 import { useState } from "react";
 
-import { createMessage } from "./api";
+import { createTextMessage } from "../api/messages-api";
 import { auth } from "../firebase";
 
-const ChatInput = () => {
+const ChatInput = ({ chatId }) => {
   const [message, setMessage] = useState("");
 
   const onKeyDown = async (e) => {
     if (e.key === "Enter") {
       setMessage("");
 
-      await createMessage({ text: message, creator: auth.currentUser.uid });
+      await createTextMessage({
+        chatId,
+        text: message,
+        creator: auth.currentUser.uid,
+      });
     }
   };
 
